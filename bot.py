@@ -271,11 +271,6 @@ class Record:
 def format_phones_to_list(data):
     return list(map(lambda x: Phone(x.strip()), data)) if data else []
 
-def hello(*args):
-    return "How can I help you?"
-
-def exit(*args):
-    return "Good bye!"
 
 def incorrect_command(*args):
     return "No such command! Enter another one!"
@@ -432,10 +427,6 @@ def handler(string):
     return actions.get("incorrect_command"), None
 
 actions = {
-    "close": exit,
-    "exit": exit, 
-    "good bye": exit,
-    "hello": hello, 
     "incorrect_command": incorrect_command,
     "show all": show_all_contacts,
     "update birthday": update_birthday,
