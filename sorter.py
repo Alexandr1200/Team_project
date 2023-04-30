@@ -114,7 +114,8 @@ def sorter() -> str:
     folders_lst = []
     changing_files = ''
     changing_folders = ''       
-    
+    print("Sorting files DONE")
+
     for folder_name in folder_extension:
         create_sort_folder(path, folder_name)
         exception_lst.append(folder_name)
@@ -153,8 +154,10 @@ Images = {images_count}\nVideo = {video_count}\nDocuments = {documents_count}\n\
 Audio = {audio_count}\nArchives = {archives_count}\nOther = {other_files_count}\nMore info in {path / result}'
 
 
-if __name__ == "__main__":
-    sorter()
+
+
+# if __name__ == "__main__":
+#     sorter()
 
 # Добавить в бот:
 # import sorter
@@ -171,3 +174,8 @@ if __name__ == "__main__":
 # @input_error
 # def sort(*args):
 #     return sorter.sorter()
+
+# @input_error
+# def sort(address_book, args):
+#     path = " ".join(args).strip('"')
+#     return sorter.sorter(path)
