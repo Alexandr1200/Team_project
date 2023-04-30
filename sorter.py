@@ -104,8 +104,10 @@ def count_files(type_file: str):
         global other_files_count
         other_files_count += 1
 
-def sorter(path) -> str:
-    
+def sorter() -> str:
+
+    print('Please write main path for sorting files, for example: C:\\Users\\User name')
+    path = input('>>> ')
     path = Path(path)
     result = 'result.txt' 
     count_files = 0
@@ -165,11 +167,7 @@ if __name__ == "__main__":
 # в actions 
 #   "sort": sort
 
-# описание в main():
-# print("Choose command: <show all>, <add>, <update>, <update birthday>, <check birthday>, <iterator>, <find>, <delete>, <hello>, <exit>, <good bye> or <close>.")
-
 # и функция для вызова
 # @input_error
-# def sort(address_book, args):
-#     path = " ".join(args).strip('"')
-#     return sorter.sorter(path)
+# def sort(*args):
+#     return sorter.sorter()
