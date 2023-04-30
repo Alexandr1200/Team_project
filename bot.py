@@ -3,7 +3,7 @@ from datetime import datetime, date
 from collections import UserDict
 import json
 from json.decoder import JSONDecodeError
-import sorter
+
 
 def input_error(func):
     def inner(*args):
@@ -19,6 +19,8 @@ def input_error(func):
             print("You haven't provided phones!")
         except EmptySearchQuery:
             print("You haven't provided search query!")
+        except EmptyMailField:
+            print("You haven't provided mail!")
         except EmptyBirthdayField:
             print("You haven't provided birthday query!")
         except IncorrectDateField:
@@ -27,8 +29,6 @@ def input_error(func):
             print("Incorrent Phone format!")
         except PerpageParameterMissing:
             print("You haven't provided contact number per page!")
-        except FileNotFoundError:
-            print("Folder not found, please check path")
     return inner
 
 def date_error(func):
@@ -69,6 +69,8 @@ class PhonesDataMissingError(Exception):
 class EmptySearchQuery(Exception):
     pass
 
+class EmptyMailField(Exception):
+    pass
 
 class EmptyBirthdayField(Exception):
     pass
@@ -127,6 +129,15 @@ class Phone(Field):
         self._value = new_value
 
 
+class Mail(Field):
+
+    def __init__(self, mail):
+        self.value = mail
+        
+    def is_the_same_mail(self, mail):
+        return self.value == mail
+
+
 class Birthday(Field):
 
     def __init__(self, birthday):
@@ -169,7 +180,7 @@ class AddressBook(UserDict):
                 name = Name(name)
                 rec = Record(name)
                 rec.phones = [Phone(phone) for phone in record["phones"]]
-
+                rec.mail = [Mail(mail) for mail in record["mail"]]
                 birthday = datetime.strptime(record["birthday"], '%d %B %Y').date() if record["birthday"] else None
                 rec.birthday = Birthday(birthday)
                 self.add_record(rec)
@@ -178,6 +189,7 @@ class AddressBook(UserDict):
         with open("contacts.txt", "w") as fh:
 
             data = {record.name.value: {"phones": [i.value for i in record.phones], 
+                                    "mail": record.mail.value if record.mail.value else None,
                                     "birthday": record.birthday.value.strftime('%d %B %Y') if record.birthday.value else None} 
                                     for record in self.data.values()}
             json.dump(data, fh)
@@ -203,6 +215,7 @@ class AddressBook(UserDict):
         if data:
             return '\n'.join([f"Name: {record.name.value} | "
                               f"phones: {', '.join([i.value for i in record.phones]) if record.phones else '-'} | "
+                              f"mail: {record.mail.value} | "
                               f"birthday: {record.birthday.value if record.birthday.value else '-'}"
                               for record in data])
         return None
@@ -229,11 +242,17 @@ class AddressBook(UserDict):
 
 class Record:
     phones = []
+    mail = None
     birthday = None
 
     def __init__(self, name):
         self.name = name
 
+    def has_mail(self):
+        if self.mail.value:
+            return True
+        return False
+    
     def has_birthday(self):
         if self.birthday.value:
             return True
@@ -311,6 +330,9 @@ def add_record(address_book, params):
     if phones:
         record.phones = format_phones_to_list(phones)
 
+    mail = Mail(None)
+    record.mail = mail
+ 
     birthday = Birthday(None)
     record.birthday = birthday
 
@@ -382,6 +404,28 @@ def update_birthday(address_book, params):
     return f"Field <birthday> for record with name {name} updated!"
 
 @input_error
+def update_mail(address_book, params):
+
+    if not params:
+        raise EmptyNameField
+
+    name = params[0]
+
+    contact = address_book.get_record_by_name(name)
+
+    if not contact:
+        raise ContactDoesNotExist
+    
+    if len(params) < 2:
+        raise EmptyMailField
+    
+    mail = params[1]
+    contact.mail.value = mail
+    address_book.save_data()
+
+    return f"Field <mail> for record with name {name} updated!"
+
+@input_error
 def check_birthday(address_book, params):
     if not params:
         raise EmptyNameField
@@ -399,10 +443,6 @@ def check_birthday(address_book, params):
         return f"There are {days} days left to {name}'s birthday!"
     return f"Field <birthday> for {name} is empty!"
 
-@input_error
-def sort(address_book, args):
-    path = " ".join(args).strip('"')
-    return sorter.sorter(path)
 
 @input_error
 def iterator(address_book, params):
@@ -433,17 +473,17 @@ actions = {
     "add": add_record,
     "find": find_records,
     "update": update,
+    "mail": update_mail,
     "delete": delete_record,
     "check birthday": check_birthday,
-    "iterator": iterator,
-    "sort": sort
+    "iterator": iterator
 }
 
 def main():
 
     address_book = AddressBook()
 
-    print("Choose command: <show all>, <add>, <update>, <update birthday>, <check birthday>, <iterator>, <find>, <delete>, <hello>, <sort>, <exit>, <good bye> or <close>.")
+    print("Choose command: <show all>, <add>, <update>, <mail>, <update birthday>, <check birthday>, <iterator>, <find>, <delete>, <hello>, <exit>, <good bye> or <close>.")
     print("Phone should be in format <095-123-45-67> or <095 123 45 67>")
     print("Date should be in format <01.01.2000>")
     while True:
