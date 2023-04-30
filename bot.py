@@ -125,7 +125,7 @@ class Phone(Field):
         if not match:
             raise IncorrectPhoneField
         self._value = new_value
-       
+
 
 class Birthday(Field):
 
@@ -468,9 +468,7 @@ def main():
         if result:
             print(result)
 
-        if command in ["close", "exit", "good bye"]:
-            return address_book
-            break
+
 
 if __name__ == "__main__":
     main()
