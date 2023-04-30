@@ -427,9 +427,6 @@ def handler(string):
     return actions.get("incorrect_command"), None
 
 actions = {
-    "close": exit,
-    "exit": exit, 
-    "good bye": exit,
     "incorrect_command": incorrect_command,
     "show all": show_all_contacts,
     "update birthday": update_birthday,
@@ -462,9 +459,6 @@ def main():
         if result:
             print(result)
 
-        if command in ["close", "exit", "good bye"]:
-            return address_book
-            break
 
 if __name__ == "__main__":
     main()
