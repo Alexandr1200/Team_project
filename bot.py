@@ -443,10 +443,6 @@ def check_birthday(address_book, params):
         return f"There are {days} days left to {name}'s birthday!"
     return f"Field <birthday> for {name} is empty!"
 
-@input_error
-def sort(address_book, args):
-    path = " ".join(args).strip('"')
-    return sorter.sorter(path)
 
 @input_error
 def iterator(address_book, params):
