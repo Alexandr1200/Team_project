@@ -1,4 +1,5 @@
 from bot import AddressBook, actions as contacts_actions
+import sorter
 # from notebook import NoteBook, actions as notebook_actions  #uncomment when NoteBook is ready
 
 
@@ -14,7 +15,7 @@ def initialize_addressbook():
 
     address_book = AddressBook()
 
-    print("Choose command: <show all>, <add>, <update>, <update birthday>, <check birthday>, <iterator>, <find>, <delete> or <up> to get back to menu.")
+    print("Choose command: <show all>, <add>, <update>, <mail>, <update birthday>, <check birthday>, <iterator>, <find>, <delete> or <up> to get back to menu.")
     print("Phone should be in format <095-123-45-67> or <095 123 45 67>")
     print("Date should be in format <01.01.2000>")
 
