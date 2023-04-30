@@ -1,4 +1,4 @@
-from .bot import AddressBook, actions as contacts_actions
+from bot import AddressBook, actions as contacts_actions
 # from notebook import NoteBook, actions as notebook_actions  #uncomment when NoteBook is ready
 
 
