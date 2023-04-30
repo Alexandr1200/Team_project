@@ -1,5 +1,5 @@
 from bot import AddressBook, actions as contacts_actions
-import sorter
+from sorter import sorter
 # from notebook import NoteBook, actions as notebook_actions  #uncomment when NoteBook is ready
 
 
@@ -65,17 +65,20 @@ def initialize_notebook():
 
 def start_work_with_files():
 
-    print("Choose command: .")  # here must be added commands for working with notebook
+    print("Enter to sorting or input command <up> to back to main menu!")
 
     while True:
         print("-" * 50)
-        command = input("Type command >>>>> ").strip()
+        command = input("Push enter to start sorting or input command <up> to back to main menu! >>>>> ").strip()
+        
+        
 
         if command in ["up"]:
             print("Now you are back to main menu!")
             break
-
-        # here  must be called function for working with files
+        
+        sorter()
+        
 
 
 choices = {
