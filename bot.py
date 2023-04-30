@@ -479,26 +479,26 @@ actions = {
     "iterator": iterator
 }
 
-def main():
+# def main():
 
-    address_book = AddressBook()
+#     address_book = AddressBook()
 
-    print("Choose command: <show all>, <add>, <update>, <mail>, <update birthday>, <check birthday>, <iterator>, <find>, <delete>, <hello>, <exit>, <good bye> or <close>.")
-    print("Phone should be in format <095-123-45-67> or <095 123 45 67>")
-    print("Date should be in format <01.01.2000>")
-    while True:
-        print("-" * 50)
-        command = input("Type command >>>>> ").strip()
+#     print("Choose command: <show all>, <add>, <update>, <mail>, <update birthday>, <check birthday>, <iterator>, <find>, <delete>, <hello>, <exit>, <good bye> or <close>.")
+#     print("Phone should be in format <095-123-45-67> or <095 123 45 67>")
+#     print("Date should be in format <01.01.2000>")
+#     while True:
+#         print("-" * 50)
+#         command = input("Type command >>>>> ").strip()
 
-        handler_response = handler(command)
-        func = handler_response[0]
-        args = handler_response[1]
+#         handler_response = handler(command)
+#         func = handler_response[0]
+#         args = handler_response[1]
 
-        result = func(address_book, args)
+#         result = func(address_book, args)
 
-        if result:
-            print(result)
+#         if result:
+#             print(result)
 
 
-if __name__ == "__main__":
-    main()
+# if __name__ == "__main__":
+#     main()
