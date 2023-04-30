@@ -1,4 +1,5 @@
 from bot import AddressBook, actions as contacts_actions
+from sorter import sorter
 # from notebook import NoteBook, actions as notebook_actions  #uncomment when NoteBook is ready
 
 
@@ -14,7 +15,7 @@ def initialize_addressbook():
 
     address_book = AddressBook()
 
-    print("Choose command: <show all>, <add>, <update>, <update birthday>, <check birthday>, <iterator>, <find>, <delete> or <up> to get back to menu.")
+    print("Choose command: <show all>, <add>, <update>, <mail>, <update birthday>, <check birthday>, <iterator>, <find>, <delete> or <up> to get back to menu.")
     print("Phone should be in format <095-123-45-67> or <095 123 45 67>")
     print("Date should be in format <01.01.2000>")
 
@@ -64,17 +65,20 @@ def initialize_notebook():
 
 def start_work_with_files():
 
-    print("Choose command: .")  # here must be added commands for working with notebook
+    print("Enter to sorting or input command <up> to back to main menu!")
 
     while True:
         print("-" * 50)
-        command = input("Type command >>>>> ").strip()
+        command = input("Push enter to start sorting or input command <up> to back to main menu! >>>>> ").strip()
+        
+        
 
         if command in ["up"]:
             print("Now you are back to main menu!")
             break
-
-        # here  must be called function for working with files
+        
+        sorter()
+        
 
 
 choices = {
