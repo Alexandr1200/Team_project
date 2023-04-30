@@ -3,6 +3,7 @@ from datetime import datetime, date
 from collections import UserDict
 import json
 from json.decoder import JSONDecodeError
+import sorter
 
 def input_error(func):
     def inner(*args):
@@ -26,6 +27,8 @@ def input_error(func):
             print("Incorrent Phone format!")
         except PerpageParameterMissing:
             print("You haven't provided contact number per page!")
+        except FileNotFoundError:
+            print("Folder not found, please check path")
     return inner
 
 def date_error(func):
@@ -402,6 +405,11 @@ def check_birthday(address_book, params):
     return f"Field <birthday> for {name} is empty!"
 
 @input_error
+def sort(address_book, args):
+    path = " ".join(args).strip('"')
+    return sorter.sorter(path)
+
+@input_error
 def iterator(address_book, params):
 
     if not params:
@@ -437,13 +445,14 @@ actions = {
     "delete": delete_record,
     "check birthday": check_birthday,
     "iterator": iterator,
+    "sort": sort
 }
 
 def main():
 
     address_book = AddressBook()
 
-    print("Choose command: <show all>, <add>, <update>, <update birthday>, <check birthday>, <iterator>, <find>, <delete>, <hello>, <exit>, <good bye> or <close>.")
+    print("Choose command: <show all>, <add>, <update>, <update birthday>, <check birthday>, <iterator>, <find>, <delete>, <hello>, <sort>, <exit>, <good bye> or <close>.")
     print("Phone should be in format <095-123-45-67> or <095 123 45 67>")
     print("Date should be in format <01.01.2000>")
     while True:
