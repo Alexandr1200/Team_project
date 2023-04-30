@@ -1,1 +1,1 @@
-{"Katee": {"phones": ["0335558899", "0225558877"], "birthday": null}, "ann": {"phones": ["0558889966"], "birthday": "12 December 1985"}}
+{"ann": {"phones": ["0987654321"], "mail": "alex@mail.com", "birthday": null}}
