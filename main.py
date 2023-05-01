@@ -184,12 +184,12 @@ choices = {
 }
 
 
-def menu_handler(string):
+def menu_handler(string: str):
     command = string.lower()
 
     for choice, function in choices.items():
         if command.startswith(choice):
-            return choice, function
+            return command.replace(choice, '').strip(), function
 
     return None, choices.get("incorrect_application")
 
@@ -212,9 +212,12 @@ def main():
         command = input("With what do you want to work? Type <contacts>, <notebook> or <files>. Or type <exit> to quit bot. >>>>> ").strip()
         choice, function = menu_handler(command)
 
-        result = function()
-        if result:
-            print(result)
+        if function in (add_note, show_notes, add_tag, remove_note, get_notes,):
+            print(function(choice))
+        else:
+            result = function()
+            if result:
+                print(result)
 
         if command in ["close", "exit", "good bye"]:
             break
