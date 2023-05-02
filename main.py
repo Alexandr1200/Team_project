@@ -89,7 +89,6 @@ choices = {
     "contacts": initialize_addressbook,
     "notebook": initialize_notebook,
     "files": start_work_with_files,
-    "incorrect_application": incorrect_application,
     "close": close,
     "exit": close,
     "good bye": close,
@@ -103,7 +102,7 @@ def menu_handler(string):
         if command.startswith(choice):
             return choice, function
 
-    return None, choices.get("incorrect_application")
+    return None, incorrect_application
 
 
 def handler(string, actions):
