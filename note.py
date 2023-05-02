@@ -3,6 +3,13 @@ import json
 from json import JSONDecodeError
 
 
+class NoteNameNotProvided(Exception):
+    pass
+
+
+class NoteDoesNotExist(Exception):
+    pass
+
 
 class FieldNote:
     def __init__(self, value):
@@ -57,7 +64,6 @@ class NameNote(FieldNote):
         self.__value = value
 
 
-
 class Text(FieldNote):
     def __init__(self, value):
         self.value = value
@@ -65,7 +71,8 @@ class Text(FieldNote):
 
 class Tag(FieldNote):
     def __init__(self, value):
-            self.value = value
+        self.value = value
+
 
 class NoteEncoder(json.JSONEncoder):
     def default(self, obj):
@@ -106,9 +113,117 @@ class NoteBook(UserDict):
             else:
                 self.add_notes(Note(NameNote(v['name']), Text(v['text'])))
 
-
     def save_to_file(self):
 
         with open('notes_book.json', "w") as fd:
             if self.data:
                 json.dump(self.data, fd, cls=NoteEncoder, indent=3)
+
+
+def input_error(func):
+    def inner(*args):
+        try:
+            return func(*args)
+        except ValueError:
+            print('Not enough params. Type help.')
+        except NoteNameNotProvided:
+            print("You haven't note name provided!")
+        except NoteDoesNotExist:
+            print("Note with this name doesn't exist!")
+    return inner
+
+
+def list_of_params(*args):
+
+    container = args[0]
+
+    if len(container) < 2:
+        raise ValueError
+
+    return container
+
+
+@input_error
+def add_note(note_book, *args):
+
+    lst = list_of_params(*args)
+
+    if len(lst) > 1:
+        note_book.add_notes(Note(NameNote(lst[0]), Text(' '.join(lst[1:]))))
+
+        if lst[0] in [k for k in note_book.keys()]:
+            note_book.get(lst[0]).add_tag(input('Please enter the tag for this note: ').split(', '))
+
+        return f'Note {lst[0]} was added'
+    else:
+        raise ValueError
+
+
+def show_notes(note_book, *args):
+    gen_obj = note_book.paginator(note_book)
+
+    for i in gen_obj:
+        print('*' * 50)
+        print(i)
+        input('Press any key to see next note.')
+
+    return "You don't have more notes."
+
+
+@input_error
+def add_tag(note_book, *args):
+    lst = list_of_params(*args)
+
+    if len(lst) > 1:
+        note_book.get(lst[0]).add_tag(lst[1:])
+        return f'Note {lst[0]} was update'
+    else:
+        raise ValueError
+
+
+@input_error
+def get_notes(note_book, *args):
+
+    lst = list_of_params(*args)
+    list_of_notes = {}
+
+    for k, v in note_book.items():
+        if lst[0] == k:
+            return f'{lst[0]}: {v.text}'
+
+        if str(v.text).startswith(lst[0]):
+            list_of_notes.update({k: v.text})
+
+        if k.startswith(lst[0]):
+            list_of_notes.update({k: v.text})
+
+    if list_of_notes:
+        return list_of_notes
+    return f'Not notes that start with {lst[0]}'
+
+
+@input_error
+def remove_note(note_book, *args):
+
+    lst = args[0]
+    if len(lst) < 1:
+        raise NoteNameNotProvided
+
+    name = lst[0]
+    note_exists = note_book.get(name)
+
+    if not note_exists:
+        raise NoteDoesNotExist
+
+    note_book.pop(name)
+
+    return f'Note with name {name} was deleted'
+
+
+choices = {
+            'add note': add_note,
+            'show notes': show_notes,
+            'add tag': add_tag,
+            'remove note': remove_note,
+            'note': get_notes
+           }
