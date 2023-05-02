@@ -291,9 +291,6 @@ def format_phones_to_list(data):
     return list(map(lambda x: Phone(x.strip()), data)) if data else []
 
 
-def incorrect_command(*args):
-    return "No such command! Enter another one!"
-
 def show_all_contacts(address_book, *args):
     result = address_book.show_all_contacts()
     if result:
@@ -456,18 +453,19 @@ def iterator(address_book, params):
     for i in iterator:
         print(i)
 
-def handler(string):
-    command = string.lower()
+# def handler(string):
+#     command = string.lower()
+#
+#     for action, func in actions.items():
+#         if command.startswith(action):
+#             args = string[len(action):].strip().split(' ')
+#             args = list(filter(lambda x: x.strip() if x else None, args))
+#             return func, args
+#     return actions.get("incorrect_command"), None
 
-    for action, func in actions.items():
-        if command.startswith(action):
-            args = string[len(action):].strip().split(' ')
-            args = list(filter(lambda x: x.strip() if x else None, args))
-            return func, args
-    return actions.get("incorrect_command"), None
 
 actions = {
-    "incorrect_command": incorrect_command,
+    # "incorrect_command": incorrect_command,
     "show all": show_all_contacts,
     "update birthday": update_birthday,
     "add": add_record,

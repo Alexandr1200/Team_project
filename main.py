@@ -1,10 +1,14 @@
 from bot import AddressBook, actions as contacts_actions
+from note import NoteBook, choices as notebook_actions
 from sorter import sorter
-# from notebook import NoteBook, actions as notebook_actions  #uncomment when NoteBook is ready
 
 
 def incorrect_application(*args):
     return "No such application!"
+
+
+def incorrect_command(*args):
+    return "No such command! Enter another one!"
 
 
 def close(*args):
@@ -13,6 +17,7 @@ def close(*args):
 
 def initialize_addressbook():
 
+    # commands_completer = get_commands_from_actions(contacts_actions)
     address_book = AddressBook()
 
     print("Choose command: <show all>, <add>, <update>, <mail>, <update birthday>, <check birthday>, <iterator>, <find>, <delete> or <up> to get back to menu.")
@@ -21,7 +26,9 @@ def initialize_addressbook():
 
     while True:
         print("-" * 50)
-        command = input("Type command >>>>> ").strip()
+
+        # command = prompt('Type command >>>>> ', completer=commands_completer).strip()
+        command = input('Type command >>>>> ').strip()
 
         handler_response = handler(command, contacts_actions)
         func = handler_response[0]
@@ -39,28 +46,28 @@ def initialize_addressbook():
 
 def initialize_notebook():
 
-    # notebook = NoteBook()
+    notebook = NoteBook()
+    notebook.recover_from_file()
 
-    print("Choose command: .")  # here must be added commands for working with notebook
+    print("Choose command: <add note>, <show notes>, <add tag>, <remove note> or <note>.")
 
     while True:
         print("-" * 50)
         command = input("Type command >>>>> ").strip()
 
-        # # uncomment when NoteBook is ready:
-        # handler_response = handler(command, notebook_actions)
-        # func = handler_response[0]
-        # args = handler_response[1]
-        #
-        # result = func(notebook, args)
-        #
+        handler_response = handler(command, notebook_actions)
+        func = handler_response[0]
+        args = handler_response[1]
+
+        result = func(notebook, args)
 
         if command in ["up"]:
             print("Now you are back to main menu!")
+            notebook.save_to_file()
             break
 
-        # if result:
-        #     print(result)
+        if result:
+            print(result)
 
 
 def start_work_with_files():
@@ -70,15 +77,12 @@ def start_work_with_files():
     while True:
         print("-" * 50)
         command = input("Push enter to start sorting or input command <up> to back to main menu! >>>>> ").strip()
-        
-        
 
         if command in ["up"]:
             print("Now you are back to main menu!")
             break
         
         sorter()
-        
 
 
 choices = {
@@ -110,14 +114,14 @@ def handler(string, actions):
             args = string[len(action):].strip().split(' ')
             args = list(filter(lambda x: x.strip() if x else None, args))
             return func, args
-    return actions.get("incorrect_command"), None
+    return incorrect_command, None
 
 
 def main():
 
     while True:
         print("-" * 50)
-        command = input("With what do you want to work? Type <contacts>, <notebook> or <files>. Or type <exit> to quit bot. >>>>> ").strip()
+        command = input('With what do you want to work? Type <contacts>, <notebook> or <files>. Or type <exit> to quit bot. >>>>> ').strip()
         choice, function = menu_handler(command)
 
         result = function()
