@@ -465,7 +465,6 @@ def iterator(address_book, params):
 
 
 actions = {
-    # "incorrect_command": incorrect_command,
     "show all": show_all_contacts,
     "update birthday": update_birthday,
     "add": add_record,
