@@ -155,12 +155,16 @@ def add_note(note_book, *args):
     lst = list_of_params(*args)
 
     if len(lst) > 1:
-        note_book.add_notes(Note(NameNote(lst[0]), Text(' '.join(lst[1:]))))
+        note_name = lst[0]
+        note_text = lst[1:]
+        note_book.add_notes(Note(NameNote(note_name), Text(' '.join(note_text))))
 
         if lst[0] in [k for k in note_book.keys()]:
-            note_book.get(lst[0]).add_tag(input('Please enter the tag for this note: ').split(', '))
 
-        return f'Note {lst[0]} was added'
+            note_tags = input('Please enter tags for this note: ').strip().split()
+            note_book.get(lst[0]).add_tag(note_tags)
+
+        return f'Note with name: {note_name} was added'
     else:
         raise ValueError
 
