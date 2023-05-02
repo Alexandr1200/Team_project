@@ -11,6 +11,10 @@ class NoteDoesNotExist(Exception):
     pass
 
 
+class SearchValueNotProvided(Exception):
+    pass
+
+
 class FieldNote:
     def __init__(self, value):
 
@@ -130,6 +134,8 @@ def input_error(func):
             print("You haven't note name provided!")
         except NoteDoesNotExist:
             print("Note with this name doesn't exist!")
+        except SearchValueNotProvided:
+            print("You haven't provided what to search!")
     return inner
 
 
@@ -184,14 +190,19 @@ def add_tag(note_book, *args):
 @input_error
 def get_notes(note_book, *args):
 
-    lst = list_of_params(*args)
+    lst = args[0]
+    if len(lst) < 1:
+        raise SearchValueNotProvided
+
+    search_value = lst[0]
+
     list_of_notes = {}
 
     for k, v in note_book.items():
         if lst[0] == k:
-            return f'{lst[0]}: {v.text}'
+            return f'{search_value}: {v.text}'
 
-        if str(v.text).startswith(lst[0]):
+        if str(v.text).startswith(search_value):
             list_of_notes.update({k: v.text})
 
         if k.startswith(lst[0]):
@@ -199,7 +210,7 @@ def get_notes(note_book, *args):
 
     if list_of_notes:
         return list_of_notes
-    return f'Not notes that start with {lst[0]}'
+    return f'Not notes that start with {search_value}'
 
 
 @input_error
