@@ -21,8 +21,10 @@ def initialize_addressbook():
     address_book = AddressBook()
 
     print("Choose command: <show all>, <add>, <update>, <mail>, <update birthday>, <check birthday>, <iterator>, <find>, <delete> or <up> to get back to menu.")
-    print("Phone should be in format <095-123-45-67> or <095 123 45 67>")
-    print("Date should be in format <01.01.2000>")
+    print("|<show all> - shows all contacts.| <add> - add contact example: add <name> <number> (Phone should be in format <095-123-45-67> or <095 123 45 67>)|")
+    print("|<update> - change phone number of contact example: update <name> <new number>.| <mail> - add email example: mail <name> <email>|")
+    print("|<update birthday> - add birthday, date should be in format <01.01.2000> example: update birthday <name> <date>.|")
+    print("|<check birthday> - check days to birthday example: check birthday <name>.|")
 
     while True:
         print("-" * 50)
