@@ -1,7 +1,8 @@
 from bot import AddressBook, actions as contacts_actions
 from note import NoteBook, choices as notebook_actions
 from sorter import sorter
-
+from prompt_toolkit import prompt
+from prompt_toolkit.completion import NestedCompleter
 
 def incorrect_application(*args):
     return "No such application!"
@@ -19,18 +20,30 @@ def initialize_addressbook():
 
     # commands_completer = get_commands_from_actions(contacts_actions)
     address_book = AddressBook()
+    addressbook_commands = {
+        "show all": None,
+        "add": None,
+        "update": None,
+        "mail": None,
+        "update birthday": None,
+        "check birthday": None,
+        "iterator": None,
+        "find": None,
+        "delete": None,
+        "up": None
+    }
+
+    completer = NestedCompleter.from_nested_dict(addressbook_commands)
 
     print("Choose command: <show all>, <add>, <update>, <mail>, <update birthday>, <check birthday>, <iterator>, <find>, <delete> or <up> to get back to menu.")
-    print("|<show all> - shows all contacts.| <add> - add contact example: add <name> <number> (Phone should be in format <095-123-45-67> or <095 123 45 67>)|")
-    print("|<update> - change phone number of contact example: update <name> <new number>.| <mail> - add email example: mail <name> <email>|")
-    print("|<update birthday> - add birthday, date should be in format <01.01.2000> example: update birthday <name> <date>.|")
-    print("|<check birthday> - check days to birthday example: check birthday <name>.|")
+    print("Phone should be in format <095-123-45-67> or <095 123 45 67>")
+    print("Date should be in format <01.01.2000>")
+
 
     while True:
         print("-" * 50)
 
-        # command = prompt('Type command >>>>> ', completer=commands_completer).strip()
-        command = input('Type command >>>>> ').strip()
+        command = prompt('Type command >>>>> ', completer=completer).strip()
 
         handler_response = handler(command, contacts_actions)
         func = handler_response[0]
@@ -50,12 +63,22 @@ def initialize_notebook():
 
     notebook = NoteBook()
     notebook.recover_from_file()
+    notebook_commands = {
+        "add note": None,
+        "show notes": None,
+        "add tag": None,
+        "remove note": None,
+        "note": None,
+        "up": None
+    }
 
     print("Choose command: <add note>, <show notes>, <add tag>, <remove note> or <note>.")
 
+    completer = NestedCompleter.from_nested_dict(notebook_commands)
+
     while True:
         print("-" * 50)
-        command = input("Type command >>>>> ").strip()
+        command = prompt("Type command >>>>> ", completer=completer).strip()
 
         handler_response = handler(command, notebook_actions)
         func = handler_response[0]
@@ -120,9 +143,19 @@ def handler(string, actions):
 
 def main():
 
+    commands = {
+        "contacts": None,
+        "notebook": None,
+        "files": None,
+        "exit": None,
+        "close": None,
+        "good bye": None
+    }
+    completer = NestedCompleter.from_nested_dict(commands)
+
     while True:
         print("-" * 50)
-        command = input('With what do you want to work? Type <contacts>, <notebook> or <files>. Or type <exit> to quit bot. >>>>> ').strip()
+        command = prompt('With what do you want to work? Type <contacts>, <notebook> or <files>. Or type <exit> to quit bot. >>>>> ', completer=completer).strip()
         choice, function = menu_handler(command)
 
         result = function()
